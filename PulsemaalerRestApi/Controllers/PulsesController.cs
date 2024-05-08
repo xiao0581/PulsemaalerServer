@@ -1,43 +1,42 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-
-// For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
+using PulsemaalerRestApi.Model;
+using PulsemaalerRestApi.Repositories;
 
 namespace PulsemaalerRestApi.Controllers
 {
-    [Route("api/[controller]")]
     [ApiController]
-    public class PulsesController : ControllerBase
+    [Route("[controller]")]
+    public class Puls : ControllerBase
     {
-        // GET: api/<PulsesController>
+        private readonly PulsRepo _pulsRepo = new();
+
         [HttpGet]
-        public IEnumerable<string> Get()
+        public IEnumerable<Pulse> Get()
         {
-            return new string[] { "value1", "value2" };
+            return _pulsRepo.GetAll();
         }
 
-        // GET api/<PulsesController>/5
         [HttpGet("{id}")]
-        public string Get(int id)
+        public Pulse GetBy(int id)
         {
-            return "value";
+            return _pulsRepo.GetById(id);
         }
 
-        // POST api/<PulsesController>
         [HttpPost]
-        public void Post([FromBody] string value)
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        public ActionResult<Pulse> Post([FromBody]Pulse puls) 
         {
-        }
-
-        // PUT api/<PulsesController>/5
-        [HttpPut("{id}")]
-        public void Put(int id, [FromBody] string value)
-        {
-        }
-
-        // DELETE api/<PulsesController>/5
-        [HttpDelete("{id}")]
-        public void Delete(int id)
-        {
+            try
+            {
+                Pulse createdPuls = _pulsRepo.AddPuls(puls);
+                return Created("/" + createdPuls.id, createdPuls);
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
         }
     }
 }
