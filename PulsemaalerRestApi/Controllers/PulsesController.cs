@@ -4,8 +4,8 @@ using PulsemaalerRestApi.Model;
 
 namespace PulsemaalerRestApi.Controllers
 {
+    [Route("api/[controller]")]
     [ApiController]
-    [Route("[controller]")]
     public class PulsesController : ControllerBase
     {
         private readonly PersonRepository _pulsRepo;
