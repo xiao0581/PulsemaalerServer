@@ -1,42 +1,78 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using PulsemaalerRestApi.Model;
-using PulsemaalerRestApi.Repositories;
+
 
 namespace PulsemaalerRestApi.Controllers
 {
     [ApiController]
     [Route("[controller]")]
-    public class Puls : ControllerBase
+    public class PulsesController : ControllerBase
     {
-        private readonly PulsRepo _pulsRepo = new();
-
+        private readonly PersonRepository _pulsRepo;
+        public PulsesController(PersonRepository pulsRepo)
+        {
+            _pulsRepo = pulsRepo;
+        }
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [HttpGet]
-        public IEnumerable<Pulse> Get()
+        public ActionResult<IEnumerable<Person>> Get()
         {
-            return _pulsRepo.GetAll();
+            try
+            {
+                IEnumerable<Person> personList = _pulsRepo.GetAll();
+
+                if (!personList.Any())
+                {
+                    return NotFound("No persons found.");
+                }
+
+                return Ok(personList);
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, "Internal server error: " + ex.Message);
+            }
+
         }
 
-        [HttpGet("{id}")]
-        public Pulse GetBy(int id)
-        {
-            return _pulsRepo.GetById(id);
-        }
 
         [HttpPost]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
-        public ActionResult<Pulse> Post([FromBody]Pulse puls) 
+        public ActionResult<Person> Post([FromBody] Person person) 
         {
             try
             {
-                Pulse createdPuls = _pulsRepo.AddPuls(puls);
-                return Created("/" + createdPuls.id, createdPuls);
+                Person person1 = _pulsRepo.Add(person);
+                return Created("/" + person1.Id, person1);
             }
             catch (Exception ex)
             {
                 return BadRequest(ex.Message);
             }
+        }
+
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        [HttpPut("{id}")]
+        public ActionResult<Person> Put(int id, [FromBody] Person person)
+        {
+                Person? update = _pulsRepo.update(id, person);
+                if (update == null) return NotFound();
+                else return Ok(update);
+           
+        }
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        [HttpDelete("{id}")]
+        public ActionResult<Person> Delete(int id)
+        {
+            Person? deletedPerson = _pulsRepo.Delete(id);
+            if (deletedPerson == null) return NotFound();
+            else return Ok(deletedPerson);
         }
     }
 }
