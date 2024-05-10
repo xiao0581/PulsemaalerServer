@@ -8,7 +8,11 @@
 
         public double Bpm { get; set; }
 
-
+        /// <summary>
+        /// This method validates the name of the person
+        /// </summary>
+        /// <exception cref="ArgumentNullException"></exception>
+        /// <exception cref="ArgumentException"></exception>
         public void validateName()
         {
             if (Name is null)
@@ -21,6 +25,11 @@
             }
 
         }
+
+        /// <summary>
+        /// This method validates the age of the person
+        /// </summary>
+        /// <exception cref="ArgumentOutOfRangeException"></exception>
         public void validateBirthYear()
         {
             if (Age <= 0)
