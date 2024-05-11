@@ -40,7 +40,7 @@
 
 
             }
-            public Person? Delete(int id)
+            public Person? Delete(String name)
             {
                 Person? person = _context.Persons.FirstOrDefault(p => p.Name == name);
             if (person != null)
@@ -50,7 +50,7 @@
                 }
                 return person;
             }
-            public Person update(int id, Person person)
+            public Person update(String name, Person person)
             {
             Person? p = _context.Persons.FirstOrDefault(p => p.Name == name);
             if (p != null)
