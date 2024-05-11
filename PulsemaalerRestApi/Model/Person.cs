@@ -6,7 +6,10 @@
         public string? Name { get; set; }
         public int Age { get; set; }
 
-        public double Bpm { get; set; }
+        public int HvilePuls { get; set; }
+        public int AktivPuls { get; set; }
+        public int Stresspuls { get; set; }
+        public int AfterTrainingPuls { get; set; }
 
 
         public void validateName()

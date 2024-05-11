@@ -38,7 +38,7 @@ namespace PulsemaalerRestApi.Controllers
 
 
         [HttpPost]
-        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status201Created)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         public ActionResult<Person> Post([FromBody] Person person) 
@@ -46,7 +46,7 @@ namespace PulsemaalerRestApi.Controllers
             try
             {
                 Person person1 = _pulsRepo.Add(person);
-                return Created("/" + person1.Id, person1);
+                return Created("/" + person1.Name, person1);
             }
             catch (Exception ex)
             {
@@ -57,22 +57,38 @@ namespace PulsemaalerRestApi.Controllers
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
-        [HttpPut("{id}")]
-        public ActionResult<Person> Put(int id, [FromBody] Person person)
+        [HttpPut("{name}")]
+        public ActionResult<Person> Put(String name, [FromBody] Person person)
         {
-                Person? update = _pulsRepo.update(id, person);
+                Person? update = _pulsRepo.update(name, person);
                 if (update == null) return NotFound();
                 else return Ok(update);
            
         }
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
-        [HttpDelete("{id}")]
-        public ActionResult<Person> Delete(int id)
+        [HttpDelete("{name}")]
+        public ActionResult<Person> Delete(String name)
         {
-            Person? deletedPerson = _pulsRepo.Delete(id);
+            Person? deletedPerson = _pulsRepo.Delete(name);
             if (deletedPerson == null) return NotFound();
             else return Ok(deletedPerson);
+        }
+
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        [HttpGet("{name}")]
+        public ActionResult<Person> Get(String name)
+        {
+            Person? person = _pulsRepo.GetbyName(name);
+            if (person == null)
+            {
+                return NotFound("No such class, name: \"" + name);
+            }
+            else
+            {
+                return Ok(person);
+            }
         }
     }
 }

@@ -13,9 +13,9 @@
                 IQueryable<Person> queryable = _context.Persons.AsQueryable();
                 return queryable.ToList();
             }
-            public Person? Get(int id)
+            public Person? GetbyName(String name)
             {
-                return _context.Persons.Find(id);
+                return _context.Persons.FirstOrDefault(p => p.Name == name);
             }
             public Person Add(Person person)
             {
@@ -25,24 +25,27 @@
 
 
             }
-            public Person? Delete(int id)
+            public Person? Delete(String name)
             {
-                Person? person = _context.Persons.Find(id);
-                if (person != null)
+                Person? person = _context.Persons.FirstOrDefault(p => p.Name == name);
+            if (person != null)
                 {
                     _context.Persons.Remove(person);
                     _context.SaveChanges();
                 }
                 return person;
             }
-            public Person update(int id, Person person)
+            public Person update(String name, Person person)
             {
-                Person? p = _context.Persons.Find(id);
-                if (p != null)
+            Person? p = _context.Persons.FirstOrDefault(p => p.Name == name);
+            if (p != null)
                 {
                     p.Name = person.Name;
                     p.Age = person.Age;
-                    p.Bpm = person.Bpm;
+                    p.HvilePuls = person.HvilePuls;
+                p.AktivPuls = person.AktivPuls;
+                p.Stresspuls = person.Stresspuls;
+                p.AfterTrainingPuls = person.AfterTrainingPuls;
                     _context.SaveChanges();
                 }
 
