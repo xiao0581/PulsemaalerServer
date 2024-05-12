@@ -66,6 +66,34 @@
 
                 return person;
             }
+
+        public Person? PatchUpdate(string name, Person updateData)
+        {
+            Person? existingPerson = _context.Persons.FirstOrDefault(p => p.Name == name);
+            if (existingPerson != null)
+            {
+                // 只更新非null和非默认值的字段（这里假设0是默认值）
+                if (!string.IsNullOrEmpty(updateData.Name))
+                    existingPerson.Name = updateData.Name;
+                if (updateData.Age > 0) // 假设年龄0是非法的，只有当大于0时才更新
+                    existingPerson.Age = updateData.Age;
+                if (updateData.HvilePuls > 0)
+                    existingPerson.HvilePuls = updateData.HvilePuls;
+                if (updateData.AktivPuls > 0)
+                    existingPerson.AktivPuls = updateData.AktivPuls;
+                if (updateData.Stresspuls > 0)
+                    existingPerson.Stresspuls = updateData.Stresspuls;
+                if (updateData.AfterTrainingPuls > 0)
+                    existingPerson.AfterTrainingPuls = updateData.AfterTrainingPuls;
+
+                _context.SaveChanges();
+            }
+
+            return existingPerson;
         }
-    
+    }
+
+
 }
+    
+

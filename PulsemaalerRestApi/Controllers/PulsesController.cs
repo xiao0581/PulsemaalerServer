@@ -90,5 +90,17 @@ namespace PulsemaalerRestApi.Controllers
                 return Ok(person);
             }
         }
+
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        [HttpPatch("{name}")]
+        public ActionResult<Person> Patch(String name, [FromBody] Person person)
+        {
+            Person? update = _pulsRepo.PatchUpdate(name, person);
+            if (update == null) return NotFound();
+            else return Ok(update);
+
+        }
     }
 }
