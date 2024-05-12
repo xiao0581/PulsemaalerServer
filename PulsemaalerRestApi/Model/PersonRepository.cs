@@ -40,6 +40,12 @@
 
 
             }
+       
+        /// <summary>
+        /// This method deletes a person from the database      
+        /// </summary>
+        /// <param name="name"></param>
+        /// <returns></returns>
             public Person? Delete(String name)
             {
                 Person? person = _context.Persons.FirstOrDefault(p => p.Name == name);
@@ -50,6 +56,12 @@
                 }
                 return person;
             }
+       /// <summary>
+       ///  This method updates a person in the database
+       /// </summary>
+       /// <param name="name"></param>
+       /// <param name="person"></param>
+       /// <returns></returns>
             public Person update(String name, Person person)
             {
             Person? p = _context.Persons.FirstOrDefault(p => p.Name == name);
@@ -67,15 +79,21 @@
                 return person;
             }
 
+        /// <summary>
+        /// This method can update only one or more of several properties
+        /// </summary>
+        /// <param name="name"></param>
+        /// <param name="updateData"></param>
+        /// <returns></returns>
         public Person? PatchUpdate(string name, Person updateData)
         {
             Person? existingPerson = _context.Persons.FirstOrDefault(p => p.Name == name);
             if (existingPerson != null)
             {
-                // 只更新非null和非默认值的字段（这里假设0是默认值）
+               
                 if (!string.IsNullOrEmpty(updateData.Name))
                     existingPerson.Name = updateData.Name;
-                if (updateData.Age > 0) // 假设年龄0是非法的，只有当大于0时才更新
+                if (updateData.Age > 0) 
                     existingPerson.Age = updateData.Age;
                 if (updateData.HvilePuls > 0)
                     existingPerson.HvilePuls = updateData.HvilePuls;

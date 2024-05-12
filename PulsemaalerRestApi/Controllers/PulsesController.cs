@@ -13,6 +13,12 @@ namespace PulsemaalerRestApi.Controllers
         {
             _pulsRepo = pulsRepo;
         }
+
+
+        /// <summary>
+        /// This method gets all the persons from the database
+        /// </summary>
+        /// <returns></returns>
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [HttpGet]
@@ -36,7 +42,11 @@ namespace PulsemaalerRestApi.Controllers
 
         }
 
-
+        /// <summary>
+        /// This method adds a person to the database
+        /// </summary>
+        /// <param name="person"></param>
+        /// <returns></returns>
         [HttpPost]
         [ProducesResponseType(StatusCodes.Status201Created)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
@@ -54,6 +64,12 @@ namespace PulsemaalerRestApi.Controllers
             }
         }
 
+        /// <summary>
+        /// This method updates a person in the database
+        /// </summary>
+        /// <param name="name"></param>
+        /// <param name="person"></param>
+        /// <returns></returns>
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
@@ -65,6 +81,13 @@ namespace PulsemaalerRestApi.Controllers
                 else return Ok(update);
            
         }
+
+
+        /// <summary>
+        /// This method deletes a person from the database
+        /// </summary>
+        /// <param name="name"></param>
+        /// <returns></returns>
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         [HttpDelete("{name}")]
@@ -74,6 +97,11 @@ namespace PulsemaalerRestApi.Controllers
             if (deletedPerson == null) return NotFound();
             else return Ok(deletedPerson);
         }
+        /// <summary>
+        /// This method gets a person from the database by name
+        /// </summary>
+        /// <param name="name"></param>
+        /// <returns></returns>
 
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
@@ -91,6 +119,14 @@ namespace PulsemaalerRestApi.Controllers
             }
         }
 
+
+
+        /// <summary>
+        /// This method can update only one or more of several properties
+        /// </summary>
+        /// <param name="name"></param>
+        /// <param name="person"></param>
+        /// <returns></returns>
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]

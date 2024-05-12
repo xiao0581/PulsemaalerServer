@@ -3,6 +3,7 @@ using PulsemaalerRestApi.Model;
 
 
 var builder = WebApplication.CreateBuilder(args);
+// Add cors
 builder.Services.AddCors(options =>
 {
     options.AddPolicy(name: "AllowAll",
@@ -14,12 +15,13 @@ builder.Services.AddCors(options =>
                               });
 });
 
-// Add services to the container.
+
 
 builder.Services.AddControllers();
-// Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
+
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
+// Add DbContext
 builder.Services.AddDbContext<PersonDbContext>(options =>
     options.UseSqlServer(Connection._connectionString));
 builder.Services.AddScoped<PersonRepository>();
@@ -33,6 +35,7 @@ app.UseSwaggerUI();
 
 
 app.UseHttpsRedirection();
+// Enable CORS
 app.UseCors("AllowAll");
 app.UseAuthorization();
 
