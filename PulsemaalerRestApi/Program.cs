@@ -25,6 +25,7 @@ builder.Services.AddSwaggerGen();
 builder.Services.AddDbContext<PersonDbContext>(options =>
     options.UseSqlServer(Connection._connectionString));
 builder.Services.AddScoped<PersonRepository>();
+builder.Services.AddScoped<HvilePulsHistoryRepository>();
 
 
 var app = builder.Build();

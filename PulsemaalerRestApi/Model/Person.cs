@@ -2,7 +2,7 @@
 {
     public class Person
     {
-        public int Id { get; set; }
+        public int PersonId { get; set; }
         public string? Name { get; set; }
         public int? Age { get; set; }
 
@@ -10,6 +10,8 @@
         public int? AktivPuls { get; set; }
         public int? Stresspuls { get; set; }
         public int? AfterTrainingPuls { get; set; }
+        public virtual ICollection<HvilePulsHistory> HvilePulsHistories { get; set; } = new List<HvilePulsHistory>();
+
 
         /// <summary>
         /// This method validates the name of the person
