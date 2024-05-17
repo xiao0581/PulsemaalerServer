@@ -138,10 +138,10 @@ namespace PulsemaalerRestApi.Controllers
             else return Ok(update);
 
         }
-        [HttpGet("{id}/histories")]
-        public ActionResult<Person> GetPersonWithHistories(int id)
+        [HttpGet("{name}/histories")]
+        public ActionResult<Person> GetPersonWithHistories(string name)
         {
-            var person = _personsRepo.GetPersonWithHistories(id);
+            var person = _personsRepo.GetPersonWithHistories(name);
             if (person == null)
             {
                 return NotFound();
