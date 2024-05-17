@@ -7,7 +7,7 @@
         public int? Age { get; set; }
 
      
-        public virtual ICollection<PulsHistory> HvilePulsHistories { get; set; } = new List<PulsHistory>();
+        public virtual ICollection<PulsHistory> PulsHistories { get; set; } = new List<PulsHistory>();
 
 
         /// <summary>

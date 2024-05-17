@@ -104,7 +104,7 @@ namespace PulsemaalerRestApi.Model
         public Person? GetPersonWithHistories(string name)
         {
             return _context.Persons
-                .Include(p => p.HvilePulsHistories)
+                .Include(p => p.PulsHistories)
                 .FirstOrDefault(p => p.Name == name);
         }
     }
