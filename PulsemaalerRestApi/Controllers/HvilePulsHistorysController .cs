@@ -7,11 +7,11 @@ namespace PulsemaalerRestApi.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class HvilePulsHistorysController : ControllerBase
+    public class PulsHistorysController : ControllerBase
     {
         private readonly PulsHistoryRepository _repository;
 
-        public HvilePulsHistorysController(PulsHistoryRepository repository)
+        public PulsHistorysController(PulsHistoryRepository repository)
         {
             _repository = repository;
         }
