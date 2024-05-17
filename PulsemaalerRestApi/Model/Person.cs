@@ -6,11 +6,8 @@
         public string? Name { get; set; }
         public int? Age { get; set; }
 
-        public int? HvilePuls { get; set; }
-        public int? AktivPuls { get; set; }
-        public int? Stresspuls { get; set; }
-        public int? AfterTrainingPuls { get; set; }
-        public virtual ICollection<HvilePulsHistory> HvilePulsHistories { get; set; } = new List<HvilePulsHistory>();
+     
+        public virtual ICollection<PulsHistory> HvilePulsHistories { get; set; } = new List<PulsHistory>();
 
 
         /// <summary>

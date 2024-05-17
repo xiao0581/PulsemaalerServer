@@ -1,4 +1,6 @@
-﻿namespace PulsemaalerRestApi.Model
+﻿using Microsoft.EntityFrameworkCore;
+
+namespace PulsemaalerRestApi.Model
 {
    
         public class PersonRepository
@@ -69,10 +71,7 @@
                 {
                     p.Name = person.Name;
                     p.Age = person.Age;
-                    p.HvilePuls = person.HvilePuls;
-                p.AktivPuls = person.AktivPuls;
-                p.Stresspuls = person.Stresspuls;
-                p.AfterTrainingPuls = person.AfterTrainingPuls;
+                  
                     _context.SaveChanges();
                 }
 
@@ -95,19 +94,18 @@
                     existingPerson.Name = updateData.Name;
                 if (updateData.Age > 0) 
                     existingPerson.Age = updateData.Age;
-                if (updateData.HvilePuls > 0)
-                    existingPerson.HvilePuls = updateData.HvilePuls;
-                if (updateData.AktivPuls > 0)
-                    existingPerson.AktivPuls = updateData.AktivPuls;
-                if (updateData.Stresspuls > 0)
-                    existingPerson.Stresspuls = updateData.Stresspuls;
-                if (updateData.AfterTrainingPuls > 0)
-                    existingPerson.AfterTrainingPuls = updateData.AfterTrainingPuls;
+              
 
                 _context.SaveChanges();
             }
 
             return existingPerson;
+        }
+        public Person? GetPersonWithHistories(int id)
+        {
+            return _context.Persons
+                .Include(p => p.HvilePulsHistories)
+                .FirstOrDefault(p => p.PersonId == id);
         }
     }
 

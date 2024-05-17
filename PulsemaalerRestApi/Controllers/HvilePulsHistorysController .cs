@@ -9,49 +9,94 @@ namespace PulsemaalerRestApi.Controllers
     [ApiController]
     public class HvilePulsHistorysController : ControllerBase
     {
-        private readonly HvilePulsHistoryRepository _repository;
+        private readonly PulsHistoryRepository _repository;
 
-        public HvilePulsHistorysController(HvilePulsHistoryRepository repository)
+        public HvilePulsHistorysController(PulsHistoryRepository repository)
         {
             _repository = repository;
         }
 
         [HttpGet("{personId}")]
-        public ActionResult<IEnumerable<HvilePulsHistory>> GetById(int personId)
+        [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(IEnumerable<PulsHistory>))]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        public ActionResult<IEnumerable<PulsHistory>> GetById(int personId)
         {
             var records = _repository.GetByPersonId(personId);
+            if (records == null || !records.Any())
+            {
+                return NotFound($"No history found for person ID {personId}.");
+            }
             return Ok(records);
         }
+
         [HttpGet]
-        public ActionResult<IEnumerable<HvilePulsHistory>> GetHvilePulsHistories()
+        [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(IEnumerable<PulsHistory>))]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        public ActionResult<IEnumerable<PulsHistory>> GetHvilePulsHistories()
         {
-            IEnumerable<HvilePulsHistory> personList = _repository.GetAll();
+            IEnumerable<PulsHistory> personList = _repository.GetAll();
+            if (!personList.Any())
+            {
+                return NotFound("No pulse histories found.");
+            }
             return Ok(personList);
         }
 
         [HttpPost]
-        public ActionResult<HvilePulsHistory> AddHvilePulsHistory(HvilePulsHistory history)
+        [ProducesResponseType(StatusCodes.Status201Created, Type = typeof(PulsHistory))]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        public ActionResult<PulsHistory> AddHvilePulsHistory(PulsHistory history)
         {
-            _repository.Add(history);
-            return CreatedAtAction(nameof(GetHvilePulsHistories), new { personId = history.PersonId }, history);
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
+
+            PulsHistory createdHistory = _repository.Add(history);
+            if (createdHistory == null)
+            {
+                return StatusCode(500, "An error occurred while creating the history record.");
+            }
+
+            return CreatedAtAction(nameof(GetById), new { personId = history.PersonId }, history);
         }
 
         [HttpPut("{historyId}")]
-        public IActionResult UpdateHvilePulsHistory(int historyId, HvilePulsHistory history)
+        [ProducesResponseType(StatusCodes.Status204NoContent)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        public IActionResult UpdateHvilePulsHistory(int historyId, PulsHistory history)
         {
             if (historyId != history.HistoryId)
             {
-                return BadRequest();
+                return BadRequest("Mismatch between the URL history ID and the body history ID.");
             }
 
-            _repository.Update(history);
-            return NoContent();
+            try
+            {
+                var updatedHistory = _repository.Update(history);
+                if (updatedHistory == null)
+                {
+                    return NotFound($"No history found with ID {historyId}.");
+                }
+                return NoContent();
+            }
+            catch (Exception)
+            {
+                return StatusCode(500, "An error occurred while updating the history.");
+            }
         }
 
         [HttpDelete("{historyId}")]
+        [ProducesResponseType(StatusCodes.Status204NoContent)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
         public IActionResult DeleteHvilePulsHistory(int historyId)
         {
-            _repository.Delete(historyId);
+            var history = _repository.Delete(historyId);
+            if (history == null)
+            {
+                return NotFound($"No history found with ID {historyId}.");
+            }
             return NoContent();
         }
     }

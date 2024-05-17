@@ -16,7 +16,7 @@ namespace PulsemaalerRestApi.Model
         /// </summary>
         public DbSet<Person> Persons { get; set; }
 
-        public DbSet<HvilePulsHistory> HvilePulsHistorys { get; set; }
+        public DbSet<PulsHistory> PulsHistorys { get; set; }
 
 
 

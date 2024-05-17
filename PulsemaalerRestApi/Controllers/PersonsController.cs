@@ -6,12 +6,12 @@ namespace PulsemaalerRestApi.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class PulsesController : ControllerBase
+    public class PersonsController : ControllerBase
     {
-        private readonly PersonRepository _pulsRepo;
-        public PulsesController(PersonRepository pulsRepo)
+        private readonly PersonRepository _personsRepo;
+        public PersonsController(PersonRepository personsRepo)
         {
-            _pulsRepo = pulsRepo;
+            _personsRepo = personsRepo;
         }
 
 
@@ -26,7 +26,7 @@ namespace PulsemaalerRestApi.Controllers
         {
             try
             {
-                IEnumerable<Person> personList = _pulsRepo.GetAll();
+                IEnumerable<Person> personList = _personsRepo.GetAll();
 
                 if (!personList.Any())
                 {
@@ -55,7 +55,7 @@ namespace PulsemaalerRestApi.Controllers
         {
             try
             {
-                Person person1 = _pulsRepo.Add(person);
+                Person person1 = _personsRepo.Add(person);
                 return Created("/" + person1.Name, person1);
             }
             catch (Exception ex)
@@ -76,7 +76,7 @@ namespace PulsemaalerRestApi.Controllers
         [HttpPut("{name}")]
         public ActionResult<Person> Put(String name, [FromBody] Person person)
         {
-                Person? update = _pulsRepo.update(name, person);
+                Person? update = _personsRepo.update(name, person);
                 if (update == null) return NotFound();
                 else return Ok(update);
            
@@ -93,7 +93,7 @@ namespace PulsemaalerRestApi.Controllers
         [HttpDelete("{name}")]
         public ActionResult<Person> Delete(String name)
         {
-            Person? deletedPerson = _pulsRepo.Delete(name);
+            Person? deletedPerson = _personsRepo.Delete(name);
             if (deletedPerson == null) return NotFound();
             else return Ok(deletedPerson);
         }
@@ -108,7 +108,7 @@ namespace PulsemaalerRestApi.Controllers
         [HttpGet("{name}")]
         public ActionResult<Person> Get(String name)
         {
-            Person? person = _pulsRepo.GetbyName(name);
+            Person? person = _personsRepo.GetbyName(name);
             if (person == null)
             {
                 return NotFound("No such class, name: \"" + name);
@@ -133,10 +133,20 @@ namespace PulsemaalerRestApi.Controllers
         [HttpPatch("{name}")]
         public ActionResult<Person> Patch(String name, [FromBody] Person person)
         {
-            Person? update = _pulsRepo.PatchUpdate(name, person);
+            Person? update = _personsRepo.PatchUpdate(name, person);
             if (update == null) return NotFound();
             else return Ok(update);
 
+        }
+        [HttpGet("{id}/histories")]
+        public ActionResult<Person> GetPersonWithHistories(int id)
+        {
+            var person = _personsRepo.GetPersonWithHistories(id);
+            if (person == null)
+            {
+                return NotFound();
+            }
+            return Ok(person);
         }
     }
 }
